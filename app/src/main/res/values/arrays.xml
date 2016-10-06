@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_temper_entryValues">
+        <item>@string/pref_temper_value_metric</item>
+        <item>@string/pref_temper_value_imperial</item>
+    </string-array>
+    <string-array name="pref_temper_entries">
+        <item>@string/pref_temper_entry_metric</item>
+        <item>@string/pref_temper_entry_imperial</item>
+    </string-array>
+</resources>

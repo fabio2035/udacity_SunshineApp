@@ -1,11 +1,18 @@
 package com.fabio.monster.sunshine.app;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
+
+    public final String LOG_TAG = MainActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,10 +41,38 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+                return  true;
         }
 
+        if(id == R.id.action_view_location) {
+        Uri geoLocation = getUri();
+        if (geoLocation != null) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(geoLocation);
+            if (intent.resolveActivity(getPackageManager())!=null){
+                startActivity(intent);
+            }else{
+                Log.d(LOG_TAG, "Couldn't call " + geoLocation + ", no receiving apps installed");
+            }
+        }
+        }
+
+
+
+
         return super.onOptionsItemSelected(item);
+    }
+
+    private Uri getUri() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String city = prefs.getString(getString(R.string.pref_city_key), getString(R.string.pref_city_default));
+        String country_code = prefs.getString(getString(R.string.pref_country_key), getString(R.string.pref_country_default));
+        Uri geoLocation = Uri.parse("geo:0,0?").buildUpon()
+                .appendQueryParameter("q", city.concat(" ").concat(country_code))
+                .build();
+        return geoLocation;
     }
 
 
